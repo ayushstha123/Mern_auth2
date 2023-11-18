@@ -1,11 +1,22 @@
-import './App.css';
+import React from 'react'
+import { BrowserRouter,Routes,Route } from 'react-router-dom'
+import Home from './pages/Home'
+import Header from './components/Header'
+import Login from './pages/auth/Login'
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-<h1>hello world</h1>
-    </div>
-  );
+    <>
+    <BrowserRouter>
+    <Header/>
+    <Routes>
+<Route path='/' element={<Home/>}></Route>
+<Route path='/login' element={<Login/>}></Route>
+
+    </Routes>
+    </BrowserRouter>
+    </>
+  )
 }
 
-export default App;
+export default App
