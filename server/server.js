@@ -2,10 +2,11 @@ import express from 'express';
 import dotenv from 'dotenv';
 import userRoutes from './routes/userRoute.js'
 import { notFound, errorHandler } from './Middleware/errorMiddleware.js';
+import connectDB from './config/db.js';
 dotenv.config();
+connectDB();
 
 const app = express();
-
 app.use('/api/users',userRoutes);
 
 //custom error handling 
