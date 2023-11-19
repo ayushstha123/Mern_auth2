@@ -11,9 +11,9 @@ const Header = () => {
 
   return (
     <div>
-	<nav className='bg-blue-400 p-5 '>
+	<nav className='bg-blue-400 p-2'>
         <div className='flex justify-between px-5'>
-        <div><h1 className='text-2xl font-bold cursor-pointer ' onClick={goHome}>Auth-App</h1>
+        <div><h1 className='text-2xl mt-1 font-bold cursor-pointer ' onClick={goHome}>Auth-App</h1>
 </div>
 <div className='flex'>
     <div className='flex'>
