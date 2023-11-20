@@ -7,12 +7,18 @@ dotenv.config();
 connectDB();
 
 const app = express();
+
+
+app.use(express.json());
+app.use(express.urlencoded({extended:true}));
+
 app.use('/api/users',userRoutes);
 
 //custom error handling 
 app.use(notFound);
 app.use(errorHandler);
-
+app.use(express.json());//lets us parse json data
+app.use(express.urlencoded({extended:true}));//lets us parse form data
 const PORT=process.env.PORT || 5000;
 app.get('/',(req,res)=>res.send("server is ready"));
 app.listen(PORT,()=>{
