@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
+
 const Signup = () => {
     const [name,setName]=useState();
     const [email,setEmail]=useState();

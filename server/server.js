@@ -4,11 +4,11 @@ import cookieParser from 'cookie-parser';
 import userRoutes from './routes/userRoute.js'
 import { notFound, errorHandler } from './Middleware/errorMiddleware.js';
 import connectDB from './config/db.js';
+import cors from 'cors';
 dotenv.config();
 connectDB();
 
 const app = express();
-
 
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
