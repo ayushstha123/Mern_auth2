@@ -7,7 +7,7 @@ const Home = () => {
     <div>
         <h1 className='text-4xl font-light m-5'> {userInfo? 
         (<>
-        Welcome {userInfo.data.name}
+        Welcome {userInfo.name}
         </>)
         : ''}</h1>
         </div>

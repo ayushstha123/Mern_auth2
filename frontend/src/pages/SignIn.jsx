@@ -1,8 +1,8 @@
 import React, { useState,useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch,useSelector } from 'react-redux';
-import { useLoginMutation } from '../slices/userApiSlice';
-import { setCredentials } from '../slices/authSlice';
+import { useLoginMutation } from '../slices/userApiSlice.js';
+import { setCredentials } from '../slices/authSlice.js';
 import {toast} from 'react-toastify';
 
 const SignIn = () => {
@@ -59,7 +59,7 @@ try {
               onChange={(e)=>setPassword(e.target.value)}
 
             />
-            <button type='submit' className='w-full text-center py-3 rounded bg-green-600 text-white hover:bg-green-500 focus:outline-none my-1'> Login</button>
+            <button type='submit' className='w-full text-center py-3 rounded bg-green-600 text-white hover:bg-green-500 focus:outline-none my-1'> {isLoading ? 'Loading...' : 'Sign In '}</button>
             <p className='mt-5'>  New User? <Link className='text-blue-500' to='/signup'>Register</Link></p>
 
         </div>

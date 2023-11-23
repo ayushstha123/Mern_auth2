@@ -7,24 +7,22 @@ import generateToken from '../utils/generateToken.js';
 export const authUser = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await User.findOne({ email });
 
+    const user = await User.findOne({ email });
+  
     if (user && (await user.matchPassword(password))) {
       generateToken(res, user._id);
-      res.status(201).json({
-        success: true,
-        data: {
-          _id: user._id,
-          name: user.name,
-          email: user.email,
-        },
+  
+      res.json({
+        _id: user._id,
+        name: user.name,
+        email: user.email,
       });
     } else {
-      res.status(401).json({
-        success: false,
-        message: 'Invalid email or password',
-      });
+      res.status(401);
+      throw new Error('Invalid email or password');
     }
+    
   } catch (error) {
     console.error(error);
     res.status(500).json({
@@ -87,7 +85,7 @@ export const logoutUser = (req, res) => {
 }
 
 //@des      get user profile
-// @route   POST /api/users/profile
+// @route   get /api/users/profile
 // @access  private
 export const getUserProfile = asyncHandler(async (req, res) => {
   const user = {
@@ -99,34 +97,50 @@ export const getUserProfile = asyncHandler(async (req, res) => {
 });
 
 //@des      update user profile
-// @route   POST /api/users/profile
+// @route   put /api/users/profile
 // @access  private
 export const updateUserProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
-  if (user) {
-    user.name = req.body.name || user.name; //if the user didnt update the name i need to put the same name so user.name use gareko
-    user.email = req.body.email || user.email; //if the user didnt update the name i need to put the same name so user.name use gareko
 
-    if (req.body.password) {
-      user.password = req.body.password;
+    if (user) {
+      // Check if the new email is provided and if it's different from the current email
+      if (req.body.email && req.body.email !== user.email) {
+        // Check if the new email already exists in the database
+        const emailExists = await User.findOne({ email: req.body.email });
+
+        if (emailExists) {
+          res.status(400).json({ message: 'Email is already in use' });
+          return;
+        }
+
+        // If the email is not in use, update the user's email
+        user.email = req.body.email;
+      }
+
+      // Update other user information
+      user.name = req.body.name || user.name;
+
+      if (req.body.password) {
+        user.password = req.body.password;
+      }
+
+      const updatedUser = await user.save();
+      console.log(updatedUser);
+
+      res.status(200).json({
+        _id: updatedUser._id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+      });
+    } else {
+      res.status(404);
+      throw new Error('User not found!');
     }
-    const updatedUser=await user.save()
-    console.log(updatedUser)
-    res.status(200).json({
-      _id: updatedUser._id,
-      name: updatedUser.name,
-      email: updatedUser.email,
-    })
-
-  } else {
-    res.status(404);
-    throw new Error("User not found!");
-  }
   } catch (error) {
     console.error('Error updating user profile:', error);
     res.status(500).json({ message: 'Internal Server Error' });
   }
-}
+};
 
 

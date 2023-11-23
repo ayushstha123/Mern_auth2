@@ -29,7 +29,7 @@ const [logoutApiCall]=useLogoutMutation();
            <div className='flex gap-5'>
             {userInfo ? 
             <>
-            <Link to={'/profile'} ><button className='px-4 py-1 rounded font-thin text-white'>{userInfo.data.name}</button></Link>
+            <Link to={'/profile'} ><button className='px-4 py-1 rounded font-thin text-white'>{userInfo.name}</button></Link>
             <button className='px-4 py-1 rounded font-thin bg-red-600 border-none shadow-md text-white' onClick={logoutHandler}>Logout</button>
 
             </>         

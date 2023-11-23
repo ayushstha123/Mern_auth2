@@ -1,17 +1,17 @@
 import { useState,useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom';
-import { useRegisterMutation } from '../slices/userApiSlice';
+import { useNavigate } from 'react-router-dom';
 import { useSelector,useDispatch } from 'react-redux';
-import { setCredentials } from '../slices/authSlice';
+import { setCredentials } from '../slices/authSlice.js';
 import { toast } from 'react-toastify';
+import { useUpdateMutation } from '../slices/userApiSlice';
 
-const Signup = () => {
+const Profile = () => {
     const [name,setName]=useState();
     const [email,setEmail]=useState();
     const [password,setPassword]=useState();
     const [confPassword,setConfPassword]=useState();
 
-    const [register,{isLoading}]=useRegisterMutation();
+    const [update,{isLoading}]=useUpdateMutation();
 
     const {userInfo}=useSelector((state)=>state.auth);
 
@@ -20,31 +20,38 @@ const Signup = () => {
     
 
     useEffect(()=>{
-      if(userInfo){
-        navigate('/');
-      }
-    },[navigate,userInfo]);
-    const handleSubmit=async(e)=>{
+      setName(userInfo.name);
+      setEmail(userInfo.email);
+    },[userInfo.setName,userInfo.setEmail]);
+
+    const updateProfile=async(e)=>{
         e.preventDefault();
         if (password !== confPassword) {
           toast.error('Passwords do not match');
         } else {
           try {
-            const res = await register({ name, email, password }).unwrap();
+            const res=await update({
+              _id:userInfo._id,
+              name,
+              email,
+              password
+            }).unwrap();
+            console.log(res);
             dispatch(setCredentials({ ...res }));
+            toast.success('Profile updated successfully');
             navigate('/');
           } catch (err) {
             toast.error(err?.data?.message || err.error);
           }
-        }
+                }
       };
   return (
     <div>
-       <form onSubmit={handleSubmit} className="bg-blue-200 h-screen  flex flex-col"> 
+       <form onSubmit={updateProfile} className="bg-blue-200 h-screen  flex flex-col"> 
         <div className="container max-w-lg mx-auto flex-1 flex flex-col items-center justify-center ">
         <div className="bg-white px-6 py-8 rounded shadow-md text-black w-full">
 
-            <h1 className='mb-8 text-3xl font-bold text-left text-black'>SIGN IN</h1>
+            <h1 className='mb-8 text-3xl font-bold text-left text-black'>PROFILE</h1>
 
             <input
               type="text"
@@ -81,8 +88,7 @@ const Signup = () => {
               onChange={(e)=>setConfPassword(e.target.value)}
 
             />
-            <button type='submit' className='w-full text-center py-3 rounded bg-green-600 text-white hover:bg-green-500 focus:outline-none my-1'>{isLoading ? "Loading...": "Sign Up"}</button>
-            <p className='mt-5'> Already have an account ? <Link className='text-blue-500' to='/signin'>Login</Link></p>
+            <button type='submit' className='w-full text-center py-3 rounded bg-green-600 text-white hover:bg-green-500 focus:outline-none my-1'>{isLoading ? 'Loading...' : 'Update Profile'}</button>
 
         </div>
         </div>
@@ -91,5 +97,4 @@ const Signup = () => {
     </div>
   )
 }
-
-export default Signup
+export default Profile

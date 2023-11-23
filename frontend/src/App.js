@@ -6,6 +6,8 @@ import { BrowserRouter,Route,Routes } from 'react-router-dom';
 import Home from './pages/Home';
 import {ToastContainer} from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import ProfileRoute from './components/ProfileRoute';
+import Profile from './pages/Profile';
 
 function App() {
   return (
@@ -17,7 +19,11 @@ function App() {
 
     <Route path="/Signin" element={<SignIn/>}></Route>
     <Route path="/Signup" element={<Signup/>}></Route>
- 
+
+    <Route path='' element={<ProfileRoute/>}>
+    <Route path="/profile" element={<Profile/>}></Route>
+    
+    </Route>
   </Routes>
    </BrowserRouter>
   );
